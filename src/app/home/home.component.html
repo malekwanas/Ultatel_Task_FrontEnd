@@ -1,0 +1,152 @@
+<div class="container-fluid p-xl-5 p-sm-4 p-3 pt-3">
+  <div
+    class="header row justify-content-between align-items-center bg-light w-100 fixed-top"
+    style="
+      border-top: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    "
+  >
+    <div class="image col-xl-2 col-md-3 col-sm-4 col-7">
+      <img src="assets/logo.png" class="img-fluid logo" alt="ULTATEL" />
+    </div>
+    <div class="welcome-message col-xl-8 col-md-6 col-sm-5 col-5 text-end">
+      <span style="font-size: larger">Welcome, {{ username }}</span>
+      <button class="btn btn-danger ms-3" (click)="logout()">Logout</button>
+    </div>
+  </div>
+  <div class="filter mt-5 pt-5">
+    <div
+      class="filter-header d-flex justify-content-between align-items-baseline"
+    >
+      <h4>Students</h4>
+      <button class="btn btn-success" (click)="openAddModal()">
+        <i class="fa fa-add"></i> Add Student
+      </button>
+    </div>
+    <div
+      class="filter-content mx-lg-0 mx-md-5 mx-sm-3 row justify-content-between mt-4 border-dark"
+    >
+      <div class="col-xl-2 col-lg-3">
+        <div class="flex-column justify-content-center align-items-start">
+          <label for="name" class="p-0 m-0 form-label my-2">Name</label>
+          <input
+            type="text"
+            [(ngModel)]="filterName"
+            class="col-3 form-control border-dark"
+          />
+        </div>
+        <div class="my-3">
+          <label for="country" class="p-0 m-0 form-label my-2">Country</label>
+          <ng-select
+            [(ngModel)]="filterCountry"
+            [items]="countries"
+            bindLabel="name"
+            bindValue="name"
+            class="border-dark"
+          ></ng-select>
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-3">
+        <div class="flex-column justify-content-center align-items-start">
+          <label for="age" class="p-0 m-0 form-label my-2">Age</label>
+          <div class="age-input p-0 m-0 d-flex align-items-center">
+            <input
+              type="number"
+              [(ngModel)]="filterMinAge"
+              class="form-control border-dark"
+              min="0"
+              (input)="validateAgeInput($event)"
+              (keydown)="preventNegativeValues($event)"
+            />
+            <a class="mx-2 text-decoration-none">to</a>
+            <input
+              type="number"
+              [(ngModel)]="filterMaxAge"
+              class="form-control border-dark"
+              min="0"
+              (input)="validateAgeInput($event)"
+              (keydown)="preventNegativeValues($event)"
+            />
+          </div>
+        </div>
+        <div class="my-3">
+          <label for="gender" class="p-0 m-0 form-label my-2">Gender</label>
+          <ng-select
+            [(ngModel)]="filterGender"
+            [items]="genders"
+            bindLabel="name"
+            bindValue="name"
+            class="border-dark"
+          ></ng-select>
+        </div>
+      </div>
+      <div
+        class="col-xl-4 col-lg-5 mt-md-3 align-self-end row justify-content-evenly"
+      >
+        <button
+          class="btn btn-primary col-6 col-md-5"
+          (click)="searchStudents()"
+        >
+          Search
+        </button>
+        <button (click)="resetFilters()" class="btn btn-danger col-6 col-md-5">
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+  <p></p>
+  <div class="table-content mt-4">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Country</th>
+          <th>Gender</th>
+          <th>Email</th>
+          <th>Created By</th>
+          <th>Last Audited By</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="filteredStudents.length === 0">
+          <td colspan="8" class="text-center">No students found</td>
+        </tr>
+        <tr *ngFor="let student of filteredStudents">
+          <td>{{ student.fullName }}</td>
+          <td>{{ calculateAge(student.birthDate) }}</td>
+          <td>{{ student.country }}</td>
+          <td>{{ student.gender === 0 ? "Male" : "Female" }}</td>
+          <td>{{ student.student_Email }}</td>
+          <td>{{ student.studentCreatedBy }}</td>
+          <td>{{ student.lastAuditedBy }}</td>
+          <td>
+            <button class="table-btn" (click)="openEditModal(student)">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button
+              class="table-btn"
+              (click)="deleteStudent(student.student_ID)"
+            >
+              <i class="bi bi-trash3"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ngb-pagination
+    [collectionSize]="collectionSize"
+    (pageChange)="pageChanged($event)"
+    [pageSize]="pageSize"
+    [(page)]="pageIndex"
+    [maxSize]="5"
+    [boundaryLinks]="true"
+  />
+</div>

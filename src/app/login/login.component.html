@@ -1,0 +1,48 @@
+<div class="login-container">
+  <div class="login-card">
+    <img src="/assets/logo.png" alt="ULTATEL" class="logo" />
+    <h2>Welcome</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input
+          type="email"
+          id="email"
+          class="form-control"
+          placeholder="Email"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <input
+            [type]="passwordFieldType"
+            id="password"
+            class="form-control"
+            placeholder="Password"
+            [(ngModel)]="password"
+            name="password"
+            required
+          />
+          <div class="input-group-append">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="togglePasswordVisibility()"
+            >
+              <i
+                class="fas"
+                [ngClass]="
+                  passwordFieldType === 'password' ? 'fa-eye-slash' : 'fa-eye'
+                "
+              ></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </form>
+    <a routerLink="/register" class="register-link">Register</a>
+  </div>
+</div>
